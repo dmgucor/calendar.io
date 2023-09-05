@@ -1,0 +1,49 @@
+#weekly-grid{
+    width: 100%;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.single-cell{
+    height: 2rem;
+    border: solid 1px
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar-grid{
+    display: grid;
+    grid-template-columns: 1fr 20fr;
+    grid-template-rows: 1fr 15fr;
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
+#hour-stamps--container{
+    grid-column: 1;
+    grid-row: 2;
+    position: relative;
+}
+
+.hour-column{
+    height: 101%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: .8rem;
+    position: absolute;
+    top: -6px;
+    right: 5px;
+}
+
+.day-stamps--container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    grid-row: 1;
+    grid-column: 2;
+}
