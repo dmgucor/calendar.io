@@ -9,6 +9,7 @@ import "./MainPage.css";
 
 function MainPage() {
   const [showAddEvent, setShowEvent] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   function handleOnClickAddEvent() {
     setShowEvent(!showAddEvent);
@@ -16,7 +17,10 @@ function MainPage() {
 
   return (
     <>
-      <NavBar></NavBar>
+      <NavBar
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
+      ></NavBar>
       <div className="main--content--container">
         <div className="left-panel--container">
           <div>
@@ -35,7 +39,7 @@ function MainPage() {
               <AddEvent closeModal={handleOnClickAddEvent}></AddEvent>,
               document.getElementById("root")
             )}
-          <WeeklyView></WeeklyView>
+          <WeeklyView currentDate={currentDate}></WeeklyView>
         </div>
       </div>
     </>

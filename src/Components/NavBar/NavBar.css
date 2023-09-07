@@ -12,8 +12,43 @@
     padding: 1rem 2rem 0;
 }
 
-.week-changer--container{
+.action-buttons--container{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.week-changer--container{
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    min-width: 15rem;
+}
+
+.week-changer--container>p{
+    margin: 0 .5rem;
+}
+
+.change-week-button:hover{
+    cursor: pointer;
+}
+
+.show-today-button{
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 0.9rem;
+    background-color: #4EA699;
+    color: white;
+    border: solid 1px white;
+    height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: .3rem;
+}
+
+.show-today-button:hover{
+    filter: brightness(0.85);
+    cursor: pointer;
 }
