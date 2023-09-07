@@ -1,0 +1,38 @@
+.main--content--container{
+    display: flex;
+    width: 100%;
+    padding-top: 2rem;
+}
+
+.left-panel--container{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+
+.right-panel--container{
+    width: 80%;
+    margin-right: 2rem;
+}
+
+.add-event-button{
+    border: none;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background-color: #4EA699;
+    transition: transform .4s ease-in-out;
+}
+
+.add-event-button:hover{
+    cursor: pointer;
+    transform: rotate(110deg)
+}
+
+.add-event-icon{
+    height: 2rem;
+    width: 2rem;
+    color: white;
+}

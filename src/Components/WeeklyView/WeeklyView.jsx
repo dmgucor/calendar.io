@@ -1,14 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import "./WeeklyView.css";
 
 function WeeklyView() {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayInMillis = 24 * 60 * 60 * 1000;
+  const [firstDayOfWeek, setFirstDayOfWeek] = useState(getFirstDayOfWeek());
 
   useEffect(() => {
     createCells();
     createHourStamps();
   }, []);
+
+  function getFirstDayOfWeek() {
+    const currentDay = new Date();
+    const firstDay = currentDay.getTime() - currentDay.getDay() * dayInMillis;
+    const dateRes = new Date(firstDay);
+    console.log(dateRes);
+    return dateRes;
+  }
+
+  function createDayNumStamps() {
+    const dayNumberContainer = [];
+
+    let currentDay = firstDayOfWeek;
+    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+      const addTime = dayIndex === 0 ? 0 : dayInMillis;
+      const newDay = new Date(currentDay.getTime() + addTime);
+      dayNumberContainer.push(
+        <div className="single-day--container">
+          <p className="day-name">{days[dayIndex]}</p>
+          <p className="day-number">{newDay.getDate()}</p>
+        </div>
+      );
+      currentDay = newDay;
+    }
+
+    return dayNumberContainer;
+  }
 
   function createCells() {
     const days = 7;
@@ -29,7 +58,6 @@ function WeeklyView() {
     }
     const tableContainer = document.getElementById("weekly-grid");
     tableContainer.replaceChildren(table);
-    console.log(table);
   }
 
   function createHourStamps() {
@@ -63,11 +91,7 @@ function WeeklyView() {
     <div className="calendar-grid">
       <div id="weekly-grid"></div>
       <div id="hour-stamps--container"></div>
-      <div className="day-stamps--container">
-        {days.map((day) => (
-          <p key={day}>{day}</p>
-        ))}
-      </div>
+      <div className="day-num--container">{createDayNumStamps()}</div>
     </div>
   );
 }

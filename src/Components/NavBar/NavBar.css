@@ -1,0 +1,19 @@
+.navbar--container{
+    display: flex;
+    justify-content: space-between;
+    background-color: #4EA699;
+    
+}
+
+.navbar--container>h2{
+    margin: 0;
+    font-family: 'Borel', cursive;
+    color: white;
+    padding: 1rem 2rem 0;
+}
+
+.week-changer--container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
