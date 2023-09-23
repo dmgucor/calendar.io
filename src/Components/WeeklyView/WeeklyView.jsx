@@ -1,14 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
 import "./WeeklyView.css";
+import EventInWeek from "../EventInWeek/EventInWeek";
 
-function WeeklyView({ currentDate }) {
+function WeeklyView({ currentDate, eventsList }) {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayInMillis = 24 * 60 * 60 * 1000;
   const dateInUse = new Date(currentDate);
 
   useEffect(() => {
-    createCells();
     createHourStamps();
   }, []);
 
@@ -54,21 +54,15 @@ function WeeklyView({ currentDate }) {
     const days = 7;
     const hours = 24;
 
-    const table = document.createElement("table");
+    const rows = [];
     for (let hour = 1; hour <= hours; hour++) {
-      const row = document.createElement("tr");
-
+      const cellsInRow = [];
       for (let day = 1; day <= days; day++) {
-        const cell = document.createElement("td");
-        cell.classList.add("single-cell");
-        row.appendChild(cell);
+        cellsInRow.push(<td className="single-cell"></td>);
       }
-      if (table) {
-        table.appendChild(row);
-      }
+      rows.push(<tr>{cellsInRow}</tr>);
     }
-    const tableContainer = document.getElementById("weekly-grid");
-    tableContainer.replaceChildren(table);
+    return <table>{rows}</table>;
   }
 
   function createHourStamps() {
@@ -98,9 +92,34 @@ function WeeklyView({ currentDate }) {
     hoursContainer.replaceChildren(hoursInColumn);
   }
 
+  function showEvents() {
+    const firstDayOfWeek = getFirstDayOfWeek(dateInUse);
+    firstDayOfWeek.setHours(0);
+    firstDayOfWeek.setMinutes(0);
+
+    const eventsInWeek = eventsList.filter((event) => {
+      return (
+        new Date(event.startDate).getTime() >= firstDayOfWeek.getTime() &&
+        new Date(event.endDate).getTime() <=
+          firstDayOfWeek.getTime() + 7 * dayInMillis
+      );
+    });
+
+    if (eventsInWeek.length !== 0) {
+      const events = eventsInWeek.map((event) => {
+        return <EventInWeek event={event}></EventInWeek>;
+      });
+
+      return events;
+    }
+  }
+
   return (
     <div className="calendar-grid">
-      <div id="weekly-grid"></div>
+      <div id="weekly-grid">
+        {createCells()}
+        {showEvents()}
+      </div>
       <div id="hour-stamps--container"></div>
       <div className="day-num--container">{createDayNumStamps()}</div>
     </div>

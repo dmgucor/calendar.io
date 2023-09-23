@@ -1,0 +1,13 @@
+.single-event{
+    position: absolute;
+    overflow: hidden;
+}
+
+.single-event>p{
+    font-size: .9rem;
+    margin: .5rem;
+}
+
+.single-event:hover{
+    cursor: pointer;
+}

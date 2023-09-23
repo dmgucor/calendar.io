@@ -7,7 +7,6 @@ function NavBar({ currentDate, setCurrentDate }) {
   const dateInUse = new Date(currentDate);
 
   function getMonthName() {
-    console.log(`nav bar date ${dateInUse}`);
     const month = dateInUse.getMonth();
 
     switch (month) {

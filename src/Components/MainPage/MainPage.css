@@ -1,7 +1,13 @@
+.main-page--container{
+    height: 100vh;
+}
+
 .main--content--container{
     display: flex;
     width: 100%;
+    align-items: stretch;
     padding-top: 2rem;
+    height: 86vh;
 }
 
 .left-panel--container{
@@ -13,6 +19,7 @@
 .right-panel--container{
     width: 80%;
     margin-right: 2rem;
+    overflow-y: scroll;
 }
 
 .add-event-button{

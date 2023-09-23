@@ -120,3 +120,18 @@
     margin-left: 1rem;
    background-color: #d4d4d9;
 }
+
+.submit-button{
+    background-color: #4EA699;
+    color: white;
+}
+
+.color-input-container{
+    position: relative;
+}
+
+.check-color-input{
+    position: absolute;
+    left: 30%;
+    top:30%
+}

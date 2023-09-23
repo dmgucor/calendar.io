@@ -4,8 +4,8 @@ import "./AddEvent.css";
 import { GiCheckMark } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 
-function AddEvent({ closeModal }) {
-  const currentTime = new Date();
+function AddEvent({ closeModal, addEvent, currentDate }) {
+  const currentTime = currentDate;
   let endTime = currentTime;
   endTime = new Date(currentTime.getTime() + 15 * 60 * 1000);
 
@@ -24,6 +24,8 @@ function AddEvent({ closeModal }) {
   const [buttonFontColor, setButtonFontColor] = useState(
     calculateButtonFontColor(selectedColor)
   );
+
+  const [colorInputSelected, setColorInputSelected] = useState(false);
 
   const formatTime = (isStartTime) => {
     let startTimeMinutes = currentDateSettings.fromMinutes;
@@ -76,15 +78,15 @@ function AddEvent({ closeModal }) {
   };
 
   const formatDate = () => {
-    let month = currentDateSettings.date.getMonth();
-    let day = currentDateSettings.date.getDay();
-
+    let month = currentDateSettings.date.getMonth() + 1;
+    let day = currentDateSettings.date.getDate();
     if (month < 10) {
       month = "0" + month;
     }
     if (day < 10) {
       day = "0" + day;
     }
+
     return `${currentDateSettings.date.getFullYear()}-${month}-${day}`;
   };
 
@@ -160,41 +162,61 @@ function AddEvent({ closeModal }) {
             )}
           </div>
         ))}
-        <input
-          className="color-select"
-          type="color"
-          onChange={(e) => handleInputColorChange(e)}
-        ></input>
+        <div className="color-input-container">
+          {colorInputSelected ? (
+            <GiCheckMark
+              color={buttonFontColor}
+              className="check-color-input"
+            ></GiCheckMark>
+          ) : (
+            ""
+          )}
+          <input
+            className="color-select"
+            type="color"
+            onChange={(e) => handleInputColorChange(e)}
+          ></input>
+        </div>
       </div>
     );
-  }
-
-  function calculateButtonFontColor(color) {
-    const red = color.substring(1, 3);
-    const green = color.substring(3, 5);
-    const blue = color.substring(5);
-
-    if (
-      parseInt(red, 16) * 0.299 +
-        parseInt(green, 16) * 0.587 +
-        parseInt(blue, 16) * 0.114 >
-      150
-    ) {
-      return "#000000";
-    } else {
-      return "#FFFFFF";
-    }
   }
 
   function handleInputColorChange(event) {
     const color = event.target.value;
     handleOnClickColor(color);
+    setColorInputSelected(true);
   }
 
   function handleOnClickColor(color) {
     setSelectedColor(color);
     const fontColor = calculateButtonFontColor(color);
     setButtonFontColor(fontColor);
+    setColorInputSelected(false);
+  }
+
+  function handleAddEvent(event) {
+    const startDate = new Date(event.target.date.value);
+    startDate.setDate(startDate.getDate() + 1);
+    const startTime = event.target.StartTime.value.split(":");
+    startDate.setHours(startTime[0]);
+    startDate.setMinutes(startTime[1]);
+
+    const endDate = new Date(startDate);
+    const endTime = event.target.EndTime.value.split(":");
+    endDate.setHours(endTime[0]);
+    endDate.setMinutes(endTime[1]);
+    if (endTime < startTime) {
+      endDate.setTime(endDate.getTime() + 24 * 60 * 60 * 1000);
+    }
+    const newEvent = {
+      title: event.target.titleName.value,
+      startDate: startDate,
+      endDate: endDate,
+      description: event.target.description.value,
+      color: selectedColor,
+    };
+
+    addEvent(newEvent);
   }
 
   return (
@@ -205,10 +227,16 @@ function AddEvent({ closeModal }) {
           size="1.5rem"
           onClick={closeModal}
         ></IoClose>
-        <form className="add-event-form">
+        <form
+          className="add-event-form"
+          onSubmit={(e) => {
+            handleAddEvent(e);
+          }}
+        >
           <input
             type="text"
             id="titleName"
+            name="titleName"
             className="inputInForm onlyBottomBorder"
             placeholder="Add a title"
             maxLength="40"
@@ -216,6 +244,7 @@ function AddEvent({ closeModal }) {
           <input
             type="date"
             className="inputInForm onlyBottomBorder calendarInput"
+            name="date"
             defaultValue={formatDate()}
           ></input>
 
@@ -256,6 +285,7 @@ function AddEvent({ closeModal }) {
             type="text"
             placeholder="Add a description"
             className="inputInForm"
+            name="description"
           ></input>
           <div className="color-picker--container">
             <label className="inputLabel">Pick a color</label>
@@ -263,13 +293,9 @@ function AddEvent({ closeModal }) {
           </div>
           <div className="action-button--container">
             <button
-              className="action-button"
+              className="action-button submit-button"
               type="submit"
               disabled={submitDisabled}
-              style={{
-                backgroundColor: selectedColor,
-                color: buttonFontColor,
-              }}
             >
               Add
             </button>
@@ -286,4 +312,21 @@ function AddEvent({ closeModal }) {
   );
 }
 
-export default AddEvent;
+function calculateButtonFontColor(color) {
+  const red = color.substring(1, 3);
+  const green = color.substring(3, 5);
+  const blue = color.substring(5);
+
+  if (
+    parseInt(red, 16) * 0.299 +
+      parseInt(green, 16) * 0.587 +
+      parseInt(blue, 16) * 0.114 >
+    150
+  ) {
+    return "#000000";
+  } else {
+    return "#FFFFFF";
+  }
+}
+
+export { AddEvent, calculateButtonFontColor };
