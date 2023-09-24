@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import "./WeeklyView.css";
 import EventInWeek from "../EventInWeek/EventInWeek";
 
@@ -7,10 +6,6 @@ function WeeklyView({ currentDate, eventsList }) {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayInMillis = 24 * 60 * 60 * 1000;
   const dateInUse = new Date(currentDate);
-
-  useEffect(() => {
-    createHourStamps();
-  }, []);
 
   function getFirstDayOfWeek(dateInUse) {
     const currentDay = dateInUse;
@@ -50,7 +45,7 @@ function WeeklyView({ currentDate, eventsList }) {
     return dayNumberContainer;
   }
 
-  function createCells() {
+  function createTable() {
     const days = 7;
     const hours = 24;
 
@@ -58,22 +53,24 @@ function WeeklyView({ currentDate, eventsList }) {
     for (let hour = 1; hour <= hours; hour++) {
       const cellsInRow = [];
       for (let day = 1; day <= days; day++) {
-        cellsInRow.push(<td className="single-cell"></td>);
+        cellsInRow.push(
+          <td className="single-cell" key={`${hour}-${day}`}></td>
+        );
       }
-      rows.push(<tr>{cellsInRow}</tr>);
+      rows.push(<tr key={hour}>{cellsInRow}</tr>);
     }
-    return <table>{rows}</table>;
+    return (
+      <table>
+        <tbody>{rows}</tbody>
+      </table>
+    );
   }
 
   function createHourStamps() {
-    const hoursContainer = document.getElementById("hour-stamps--container");
-    const hoursInColumn = document.createElement("div");
-    const startHour = 0;
-    for (let hour = startHour; hour <= 24; hour++) {
+    const hoursInColumn = [];
+    for (let hour = 0; hour <= 24; hour++) {
       let formattedHour = "";
-      if (hour === 0) {
-        formattedHour = "12 am";
-      } else if (hour === 24) {
+      if (hour === 0 || hour === 24) {
         formattedHour = "12 am";
       } else if (hour === 12) {
         formattedHour = "12 pm";
@@ -83,13 +80,10 @@ function WeeklyView({ currentDate, eventsList }) {
         formattedHour = `${hour - 12} pm`;
       }
 
-      const hourElement = document.createElement("div");
-      hourElement.textContent = formattedHour;
-      hoursInColumn.appendChild(hourElement);
+      hoursInColumn.push(<p key={hour}>{formattedHour}</p>);
     }
 
-    hoursInColumn.classList.add("hour-column");
-    hoursContainer.replaceChildren(hoursInColumn);
+    return <div id="hour-stamps--container">{hoursInColumn}</div>;
   }
 
   function showEvents() {
@@ -107,7 +101,7 @@ function WeeklyView({ currentDate, eventsList }) {
 
     if (eventsInWeek.length !== 0) {
       const events = eventsInWeek.map((event) => {
-        return <EventInWeek event={event}></EventInWeek>;
+        return <EventInWeek event={event} key={event.startDate}></EventInWeek>;
       });
 
       return events;
@@ -116,12 +110,16 @@ function WeeklyView({ currentDate, eventsList }) {
 
   return (
     <div className="calendar-grid">
-      <div id="weekly-grid">
-        {createCells()}
-        {showEvents()}
-      </div>
-      <div id="hour-stamps--container"></div>
       <div className="day-num--container">{createDayNumStamps()}</div>
+      <div className="scrollable--container">
+        <div id="weekly-grid">
+          {createHourStamps()}
+          <div className="events--container">
+            {createTable()}
+            {showEvents()}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

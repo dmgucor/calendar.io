@@ -1,13 +1,47 @@
 .single-event{
     position: absolute;
-    overflow: hidden;
 }
 
 .single-event>p{
-    font-size: .9rem;
-    margin: .5rem;
+    font-size: .8rem;
+    margin: .3rem;
 }
 
-.single-event:hover{
-    cursor: pointer;
+.tooltip--container{
+    position: absolute;
+    top: -1rem;
+    z-index: 1;
+    min-width: 13rem;
+    visibility: hidden;
+    padding: .3rem;
+}
+
+.single-event:hover .tooltip--container{
+    visibility: visible;
+}
+
+.tooltip-content{
+    padding: 1rem;
+    background-color:white;
+    display: flex;
+    flex-direction: column;
+    font-size: .8rem;
+    border: solid 1px rgb(156, 156, 156);
+    border-radius: .3rem;
+    box-shadow: .3rem .3rem .3rem rgba(122, 122, 122, .4);
+}
+
+.tooltip-content>h3{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.actions--container{
+    display: flex;
+    justify-content: end;
+    margin-top: 1rem;
+}
+
+.action-icon{
+    margin-left: 1rem;
 }

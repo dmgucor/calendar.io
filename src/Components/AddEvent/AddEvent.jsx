@@ -7,7 +7,7 @@ import { IoClose } from "react-icons/io5";
 function AddEvent({ closeModal, addEvent, currentDate }) {
   const currentTime = currentDate;
   let endTime = currentTime;
-  endTime = new Date(currentTime.getTime() + 15 * 60 * 1000);
+  endTime = new Date(currentTime + 15 * 60 * 1000);
 
   const colors = ["#ce4760", "#f4b886", "#a8d4ad", "#e2afde", "#006d77"];
 

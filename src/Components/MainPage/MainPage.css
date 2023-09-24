@@ -19,7 +19,7 @@
 .right-panel--container{
     width: 80%;
     margin-right: 2rem;
-    overflow-y: scroll;
+    height: inherit;
 }
 
 .add-event-button{
