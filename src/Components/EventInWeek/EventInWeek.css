@@ -1,5 +1,6 @@
 .single-event{
     position: absolute;
+    border: 1px solid #676767;
 }
 
 .single-event>p{
@@ -38,7 +39,7 @@
 
 .actions--container{
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin-top: 1rem;
 }
 

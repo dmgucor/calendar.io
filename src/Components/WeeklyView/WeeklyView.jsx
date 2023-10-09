@@ -93,15 +93,24 @@ function WeeklyView({ currentDate, eventsList }) {
 
     const eventsInWeek = eventsList.filter((event) => {
       return (
-        new Date(event.startDate).getTime() >= firstDayOfWeek.getTime() &&
-        new Date(event.endDate).getTime() <=
-          firstDayOfWeek.getTime() + 7 * dayInMillis
+        (new Date(event.startDate).getTime() >= firstDayOfWeek.getTime() &&
+          new Date(event.startDate).getTime() <
+            firstDayOfWeek.getTime() + 7 * dayInMillis) ||
+        (new Date(event.endDate).getTime() > firstDayOfWeek.getTime() &&
+          new Date(event.endDate).getTime() <=
+            firstDayOfWeek.getTime() + 7 * dayInMillis)
       );
     });
 
     if (eventsInWeek.length !== 0) {
       const events = eventsInWeek.map((event) => {
-        return <EventInWeek event={event} key={event.startDate}></EventInWeek>;
+        return (
+          <EventInWeek
+            event={event}
+            key={event.startDate}
+            currentDate={currentDate}
+          ></EventInWeek>
+        );
       });
 
       return events;

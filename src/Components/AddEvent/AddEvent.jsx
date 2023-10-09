@@ -4,10 +4,10 @@ import "./AddEvent.css";
 import { GiCheckMark } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 
-function AddEvent({ closeModal, addEvent, currentDate }) {
-  const currentTime = currentDate;
+function AddEvent({ closeModal, addEvent }) {
+  const currentTime = new Date();
   let endTime = currentTime;
-  endTime = new Date(currentTime + 15 * 60 * 1000);
+  endTime = new Date(currentTime.getTime() + 15 * 60 * 1000);
 
   const colors = ["#ce4760", "#f4b886", "#a8d4ad", "#e2afde", "#006d77"];
 
@@ -28,21 +28,31 @@ function AddEvent({ closeModal, addEvent, currentDate }) {
   const [colorInputSelected, setColorInputSelected] = useState(false);
 
   const formatTime = (isStartTime) => {
-    let startTimeMinutes = currentDateSettings.fromMinutes;
-    let endTimeMinutes = currentDateSettings.toMinutes;
+    if (isStartTime) {
+      let startTimeMinutes = currentDateSettings.fromMinutes;
+      let startTimeHours = currentDateSettings.fromHour;
+      if (parseInt(startTimeMinutes) < 10) {
+        startTimeMinutes = "0" + parseInt(startTimeMinutes);
+      }
 
-    if (parseInt(startTimeMinutes) < 10) {
-      startTimeMinutes = "0" + parseInt(startTimeMinutes);
+      if (parseInt(startTimeHours) < 10) {
+        startTimeHours = "0" + parseInt(startTimeHours);
+      }
+
+      return `${startTimeHours}:${startTimeMinutes}`;
+    } else {
+      let endTimeMinutes = currentDateSettings.toMinutes;
+      let endTimeHours = currentDateSettings.toHour;
+      if (parseInt(endTimeMinutes) < 10) {
+        endTimeMinutes = "0" + parseInt(endTimeMinutes);
+      }
+
+      if (parseInt(endTimeHours) < 10) {
+        endTimeHours = "0" + parseInt(endTimeHours);
+      }
+
+      return `${endTimeHours}:${endTimeMinutes}`;
     }
-
-    if (parseInt(endTimeMinutes) < 10) {
-      endTimeMinutes = "0" + parseInt(endTimeMinutes);
-    }
-
-    const timeString = isStartTime
-      ? `${currentDateSettings.fromHour}:${startTimeMinutes}`
-      : `${currentDateSettings.toHour}:${endTimeMinutes}`;
-    return timeString;
   };
 
   const updateStartTime = (event) => {
@@ -286,6 +296,7 @@ function AddEvent({ closeModal, addEvent, currentDate }) {
             placeholder="Add a description"
             className="inputInForm"
             name="description"
+            maxLength={200}
           ></input>
           <div className="color-picker--container">
             <label className="inputLabel">Pick a color</label>
