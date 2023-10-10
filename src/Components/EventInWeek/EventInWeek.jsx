@@ -67,7 +67,12 @@ function getFirstDayOfWeek(dateInUse) {
   return dateRes;
 }
 
-function EventInWeek({ event, currentDate }) {
+function EventInWeek({
+  event,
+  currentDate,
+  setDeleteShowModal,
+  setEventToRemove,
+}) {
   const startTime = new Date(event.startDate);
   const endTime = new Date(event.endDate);
 
@@ -105,6 +110,11 @@ function EventInWeek({ event, currentDate }) {
     );
   }
 
+  function handleDeleteModal() {
+    setDeleteShowModal(true);
+    setEventToRemove(event);
+  }
+
   const createTooltip = () => {
     let style = {};
     if (startTime.getDay() in [0, 1, 2, 3] || eventStartsCurrentWeek !== true) {
@@ -123,17 +133,23 @@ function EventInWeek({ event, currentDate }) {
           </p>
 
           <div className="actions--container">
-            <FiEdit2
-              className="action-icon"
-              size={"1.2rem"}
-              color={"rgb(122, 122, 122)"}
-            ></FiEdit2>
-
-            <RiDeleteBin6Line
-              className="action-icon"
-              size={"1.2rem"}
-              color={"rgb(122, 122, 122)"}
-            ></RiDeleteBin6Line>
+            <div className="action-icon--container">
+              <FiEdit2
+                className="action-icon"
+                size={"1.2rem"}
+                color={"rgb(122, 122, 122)"}
+              ></FiEdit2>
+            </div>
+            <div
+              className="action-icon--container"
+              onClick={() => handleDeleteModal()}
+            >
+              <RiDeleteBin6Line
+                className="action-icon"
+                size={"1.2rem"}
+                color={"rgb(122, 122, 122)"}
+              ></RiDeleteBin6Line>
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./WeeklyView.css";
 import EventInWeek from "../EventInWeek/EventInWeek";
+import ModalDeleteEvent from "../ModalDeleteEvent/ModalDeleteEvent";
+import { createPortal } from "react-dom";
 
-function WeeklyView({ currentDate, eventsList }) {
+function WeeklyView({ currentDate, eventsList, setEventsList }) {
+  const [showDeleteModal, setDeleteShowModal] = useState(false);
+  const [eventToRemove, setEventToRemove] = useState(null);
+
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const dayInMillis = 24 * 60 * 60 * 1000;
   const dateInUse = new Date(currentDate);
@@ -12,6 +17,16 @@ function WeeklyView({ currentDate, eventsList }) {
     const firstDay = currentDay.getTime() - currentDay.getDay() * dayInMillis;
     const dateRes = new Date(firstDay);
     return dateRes;
+  }
+
+  function deleteEvent(currentEvent) {
+    const indexInList = eventsList.indexOf(currentEvent);
+    if (indexInList > -1) {
+      let newEventsList = eventsList;
+      newEventsList.splice(indexInList, 1);
+      setEventsList(newEventsList);
+      setDeleteShowModal(false);
+    }
   }
 
   function createDayNumStamps() {
@@ -109,6 +124,8 @@ function WeeklyView({ currentDate, eventsList }) {
             event={event}
             key={event.startDate}
             currentDate={currentDate}
+            setDeleteShowModal={setDeleteShowModal}
+            setEventToRemove={setEventToRemove}
           ></EventInWeek>
         );
       });
@@ -126,6 +143,15 @@ function WeeklyView({ currentDate, eventsList }) {
           <div className="events--container">
             {createTable()}
             {showEvents()}
+            {showDeleteModal &&
+              createPortal(
+                <ModalDeleteEvent
+                  setDeleteShowModal={setDeleteShowModal}
+                  eventToRemove={eventToRemove}
+                  deleteEvent={deleteEvent}
+                ></ModalDeleteEvent>,
+                document.getElementById("root")
+              )}
           </div>
         </div>
       </div>

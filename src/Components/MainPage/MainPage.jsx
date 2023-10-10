@@ -78,6 +78,7 @@ function MainPage() {
           <WeeklyView
             currentDate={currentDate}
             eventsList={eventsList}
+            setEventsList={setEventsList}
           ></WeeklyView>
         </div>
       </div>
